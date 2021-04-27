@@ -17,7 +17,7 @@ export default function Login({history}) {
         })
         
         if(dados){
-            const { _id } = dados.data;s
+            const { _id } = dados.data;
             history.push(`/main/${_id}`);
         }  
     }

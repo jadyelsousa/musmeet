@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import io from 'socket.io-client';
 import { Link} from 'react-router-dom';
 import './Main.css';
 import like from '../assets/like.svg';
 import dislike from '../assets/dislike.svg';
 import logo from '../assets/logo.svg';
+import itsameet from '../assets/itsameet.png';
 import api from '../services/api';
 
 export default function Main ({ match }){
 
     const [users, setUsers] = useState([]);
+    const [meet, setMeet] = useState(null);
 
     useEffect(() => {
         async function loadUsers(){
@@ -20,6 +23,18 @@ export default function Main ({ match }){
             setUsers(response.data);
         }
         loadUsers();
+    }, [match.params.id]);
+
+    useEffect(() => {
+        const socket = io('http://localhost:3333',{
+            query : { user: match.params.id}
+        }); 
+
+        socket.on('match', user => {
+            setMeet(user);  
+        })
+
+        
     }, [match.params.id]);
 
     async function handleLike(id){
@@ -67,6 +82,16 @@ export default function Main ({ match }){
                     Você viu tudo! :(
                 </div>
             )} 
+            { meet && (
+                <div className="match-container">
+                    <img src={itsameet} alt="Foi um meet" />
+                    <img className="avatar" src={meet.picture} alt="" />   
+                    <strong>{meet.name}</strong>       
+                    <p>{meet.email}</p>       
+                    <button type="button" onClick={() => setMeet(null)} >Voltar</button> 
+                    <a href={`https://api.whatsapp.com/send?phone=5561984451185&text=olá%20${meet.name}%20tudo%20bem?`}>WhatsaApp</a>
+                </div>
+            ) }
         </div>
     )
 }
