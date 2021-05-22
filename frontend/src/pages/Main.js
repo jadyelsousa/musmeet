@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Main.css';
 import like from '../assets/like.svg';
 import dislike from '../assets/dislike.svg';
@@ -8,10 +8,19 @@ import logo from '../assets/logo.svg';
 import itsameet from '../assets/itsameet.png';
 import api from '../services/api';
 
-export default function Main ({ match }){
+export default function Main ({ match, history }){
 
     const [users, setUsers] = useState([]);
     const [meet, setMeet] = useState(null);
+
+    async function handleSubmit(){
+
+        const dados =  match.params.id;
+    
+            if(dados){
+            history.push(`/explore/${dados}`);
+        } 
+    }
 
     useEffect(() => {
         async function loadUsers(){
@@ -20,6 +29,7 @@ export default function Main ({ match }){
                     user : match.params.id
                 }
             })
+            console.log(response);
             setUsers(response.data);
         }
         loadUsers();
@@ -40,6 +50,7 @@ export default function Main ({ match }){
     async function handleLike(id){
         await api.post(`user/${id}/likes`, null, {
             headers: {user: match.params.id}
+            
         })
         setUsers(users.filter(user => user._id !== id));
     }  
@@ -52,17 +63,24 @@ export default function Main ({ match }){
     }
     return(
         <div className="main-container">
+            <form className="explore-button">
+            <button className="btn btn-info" onClick={handleSubmit}>Explorer</button>
+                    </form>  
+            <div className="image-logo">    
             <Link to="/">
-            <img src={logo} alt="logo"/>
+            <img src={logo} alt="logo" />
             </Link>
+            </div>
             { users.length > 0 ? (
                          <ul>
                          {users.map(user => (
                               <li key={user._id}>
-                              <img src={user.picture} alt="user" />
+                              <img src={`http://localhost:3333/files/${user.image}`} alt="user" />
                               <footer>
                                   <strong>{user.name}</strong>
+                                  <p>{user.bio}</p>
                                   <p>{user.email}</p>
+                            
                               </footer>
                               
                               <div className="buttons">
@@ -89,7 +107,9 @@ export default function Main ({ match }){
                     <strong>{meet.name}</strong>       
                     <p>{meet.email}</p>       
                     <button type="button" onClick={() => setMeet(null)} >Voltar</button> 
-                    <a href={`https://api.whatsapp.com/send?phone=5561984451185&text=olá%20${meet.name}%20tudo%20bem?`}>WhatsaApp</a>
+                    <div class="buttonWts">
+                    <a href={`https://api.whatsapp.com/send?phone=55${meet.phone}&text=olá%20${meet.name}%20tudo%20bem?`} class="btn btn-success">WhatsApp</a>
+                    </div>                
                 </div>
             ) }
         </div>

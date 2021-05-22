@@ -1,0 +1,12 @@
+.register-container{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 50px 0;
+    text-align:center;
+}
+
+.image-logo img {
+    width: 350px;
+    height: 150px;
+    margin-top: 0px;
+}

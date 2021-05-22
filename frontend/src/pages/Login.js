@@ -11,16 +11,23 @@ const componentClicked = (response) => {
 export default function Login({history}) {
 
     async function responseFacebook(response) {
-
-        const dados = await api.post('/user', {
+        let dados = false;
+        if(response.status !== "unknown"){
+            dados = await api.post('/login', {
             response,
         })
-        
+        }   
         if(dados){
-            const { _id } = dados.data;
-            history.push(`/main/${_id}`);
-        }  
+            if(dados.data != null){
+                const { _id } = dados.data;
+                history.push(`/main/${_id}`);
+            }
+            else{
+                const {name, email} = response;
+                history.push(`/register/${name}/${email}`);
+        } 
     }
+}
     return (
 
         <div className="login-container">

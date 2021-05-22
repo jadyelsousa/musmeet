@@ -1,3 +1,17 @@
+:root {
+    --cor-primaria-success: rgb(12, 223, 117);
+    --cor-hover-success: rgb(116, 158, 137);
+    --cor-secundaria-success: rgb(27, 66, 50);
+    
+    --cor-primaria-info: rgb(255, 255, 255);
+    --cor-hover-info: rgb(161, 161, 161);
+    --cor-secundaria-info: rgb(53, 53, 53);
+
+    --cor-primaria-danger: rgb(200, 75, 75);
+    --cor-hover-danger: rgb(158, 116, 116);
+    --cor-secundaria-danger: rgb(58, 22, 22);
+
+}
 .main-container{
     max-width: 980px;
     margin: 0 auto;
@@ -115,3 +129,76 @@
     margin-top: 30px;
     cursor: pointer;
 }   
+.image-logo img {
+    width: 350px;
+    height: 150px;
+    margin-top: 0px;
+}
+
+.explore-button{
+    position: absolute; 
+	left: 100px;
+	top: 85px;
+}
+.btn {
+    border: none;
+    padding: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .3s;
+    border-radius: 5px;
+}
+
+/*SUCCESS*/
+.btn-success {
+    background-color: var(--cor-primaria-success);
+    outline: none;
+    color: var(--cor-secundaria-success);
+    border-bottom: px
+}
+
+.btn-success:hover {
+    background-color: var(--cor-hover-success);
+}
+
+.btn-success:active {
+    color:var(--cor-primaria-success);
+    background-color: var(--cor-secundaria-success);
+}
+
+/*INFO*/
+.btn-info {
+    background-color: var(--cor-primaria-info);
+    outline: none;
+    color: var(--cor-secundaria-info)
+}
+
+.btn-info:hover {
+    background-color: var(--cor-hover-info);
+}
+
+.btn-info:active {
+    color:var(--cor-primaria-info);
+    background-color: var(--cor-secundaria-info);
+}
+
+/*DANGER*/
+.btn-danger {
+    background-color: var(--cor-primaria-danger);
+    outline: none;
+    color: var(--cor-secundaria-danger)
+}
+
+.btn-succdangeress:hover {
+    background-color: var(--cor-hover-danger);
+}
+
+.btn-danger:active {
+    color:var(--cor-primaria-danger);
+    background-color: var(--cor-secundaria-danger);
+}
+.buttonWts{
+    position: absolute; 
+	left: 636px;
+	top: 600px;
+}

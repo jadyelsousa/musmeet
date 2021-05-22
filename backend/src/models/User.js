@@ -10,8 +10,12 @@ const userSchema = new Schema({
         required: true
     },
     bio: String,
-    picture: {
+    image: {
         type: String,
+        required: true
+    },
+    phone:{
+        type:String, 
         required: true
     },
     likes: [{
@@ -21,6 +25,10 @@ const userSchema = new Schema({
     dislikes: [{
         type: Schema.Types.ObjectId,
         ref: 'User',
+    }],
+    category: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
     }],
 }, {
     timestamps: true,
