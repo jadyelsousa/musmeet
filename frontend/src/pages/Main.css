@@ -87,6 +87,15 @@
     
 }
 
+.main-container span {
+    color:#fff;
+    padding: 6px;
+	background-color:#7159c1;
+	border-radius: 10px;
+    margin-right: 3px;
+    
+}
+
 .match-container {
     position: absolute;
     top: 0;
@@ -129,6 +138,7 @@
     margin-top: 30px;
     cursor: pointer;
 }   
+
 .image-logo img {
     width: 350px;
     height: 150px;

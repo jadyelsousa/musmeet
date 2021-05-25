@@ -10,3 +10,70 @@
     height: 150px;
     margin-top: 0px;
 }
+
+.form-register {
+    width: 100%;
+    max-width: 580px;
+    margin: 30px auto 0;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.form-register input {
+    margin-bottom: 10px;
+    height: 38px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 0 20px;
+    font-size: 14px;
+  }
+
+  .form-register textarea {
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 0 20px;
+    font-size: 14px;
+  }
+  .form-register input[type=checkbox] {
+    width: 16px;
+    height: 13px;
+    padding: 10;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
+  }
+
+  .form-register label {
+    margin-bottom: 20px;
+    border-radius: 4px;
+    padding-left: 15px;
+    text-indent: -15px;
+    padding: 0 20px;
+    font-size: 14px;
+  }
+
+  .form-register button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: 0;
+    background: #a7308d;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .form-register button:hover {
+    background: #681457;
+    color: #FFF;
+
+  }
+
+  

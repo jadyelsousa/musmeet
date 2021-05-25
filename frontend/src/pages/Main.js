@@ -29,7 +29,6 @@ export default function Main ({ match, history }){
                     user : match.params.id
                 }
             })
-            console.log(response);
             setUsers(response.data);
         }
         loadUsers();
@@ -80,6 +79,9 @@ export default function Main ({ match, history }){
                                   <strong>{user.name}</strong>
                                   <p>{user.bio}</p>
                                   <p>{user.email}</p>
+                                  <p>{user.category.map(category =>( 
+                                      <span key={category._id}>{category.name}</span>
+                                  ))}</p>
                             
                               </footer>
                               

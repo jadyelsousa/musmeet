@@ -65,35 +65,35 @@ export default function Register({ match, history }){
         }
     }
 
-   useEffect(() => {
+/*    useEffect(() => {
         function loadCategory(){
             console.log(categoryId);
           
         }
         loadCategory();
     }, [categoryId]);
-
+ */
     return (
         <div className="register-container">
             <div className="image-logo">    
             <img src={logo} alt="logo" />
-            <form onSubmit={handleSubmit}>
+            <form className="form-register" onSubmit={handleSubmit}>
                 <input type="file" name="imagem" onChange={e => setImage(e.target.files[0])} />
                 <input type="text" onChange={e => setName(e.target.value)} value={name} />
                 <input type="email" onChange={e => setEmail(e.target.value)} value={email} />
                 <input type="tel" name="phone" onChange={e => setPhone(e.target.value)} value={phone} placeholder="Telefone" />
                 <textarea name="bio" onChange={e => setBio(e.target.value)}  value={bio} placeholder="Bio" cols="30" rows="10" />
                 { categories.length > 0 ? (
-                    <label> Categorias <br/>
+                    <label> Categorias  <br/><br/>
                      { categories.map(category => (
-                        <label key={category._id} >{category.name}
-                        <input type="checkbox" name={category.name} onChange={handleCategories} value={category._id}  id="category" /> 
+                        <label key={category._id} >{category.name} 
+                            <input type="checkbox" name={category.name} onChange={handleCategories} value={category._id}  id="category" /> 
                         </label> 
                     ))}
                     </label>
                    ) : '' }
                 
-                <button type="submit" >Enviar</button>
+                <button type="submit" >Cadastrar</button>
             </form>
             </div>
 

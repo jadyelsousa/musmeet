@@ -31,11 +31,10 @@ export default function Login({history}) {
     return (
 
         <div className="login-container">
-
             <form>
             <img src={logo} alt='Musmeet'/>
                 <FacebookLogin
-                    appId="164755398795594"
+                    appId="443679043280671"
                     autoLoad={false}
                     fields="name,email,picture"
                     onClick={componentClicked}
