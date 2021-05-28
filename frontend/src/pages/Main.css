@@ -89,7 +89,7 @@
     
 }
 
-.main-container span {
+.category-button {
     color:#fff;
     padding: 6px;
 	background-color:#7159c1;
@@ -97,6 +97,7 @@
     margin-top: 3px;
     margin-right: 3px;
     display: grid;
+    cursor: pointer;
    
 }
 

@@ -11,6 +11,7 @@ const routes = express.Router();
 routes.get('/user', UserController.index); 
 routes.post('/login', UserController.create);
 routes.post('/register', multer(multerConfig).single('image'),UserController.store);
+routes.post('/user/:userId/filter', UserController.filter);
 routes.get('/userMeet', UserController.show); 
 routes.post('/user/:userId/likes', LikeController.store);
 routes.post('/user/:userId/dislikes', DislikeController.store);

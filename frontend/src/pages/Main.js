@@ -60,6 +60,20 @@ export default function Main ({ match, history }){
         })
         setUsers(users.filter(user => user._id !== id));
     }
+
+    async function handleFilter(e){
+
+        const category = e.target.name;
+        const user = match.params.id;
+        const userFilter = await api.post(`user/${user}/filter` , {
+            category
+        })
+
+        setUsers(userFilter.data);
+        
+    }  
+
+    
     return(
         <div className="main-container">
             <form className="explore-button">
@@ -80,7 +94,7 @@ export default function Main ({ match, history }){
                                   <p>{user.bio}</p>
                                   <p>{user.email}</p>
                                   <p>{user.category.map(category =>( 
-                                      <span key={category._id}>{category.name}</span>
+                                      <button type="button" className="category-button" onClick={ handleFilter } key={category._id} name={category._id}>{category.name}</button>
                                   ))}</p>
                             
                               </footer>
