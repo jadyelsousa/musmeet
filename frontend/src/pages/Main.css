@@ -40,7 +40,7 @@
 .main-container ul li footer{
     flex: 1;
     background: #fff;
-    border: 1px dolid #eee;
+    border: 1px solid #eee;
     padding: 15px 20px;
     text-align: left;
     border-radius: 0 0 5px 5px;
@@ -55,7 +55,9 @@
     font-size: 14px;
     line-height: 20px;
     color: #999;
-    margin-top: 5px;
+    margin-top: 5px; 
+    display: flex;
+    flex-wrap: wrap
 }
 
 .main-container ul li .buttons{
@@ -92,8 +94,10 @@
     padding: 6px;
 	background-color:#7159c1;
 	border-radius: 10px;
+    margin-top: 3px;
     margin-right: 3px;
-    
+    display: grid;
+   
 }
 
 .match-container {
