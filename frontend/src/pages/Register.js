@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react';
 import './Register.css';
 import api from '../services/api';
 import logo from '../assets/logo.svg';
+import avatar from '../assets/avatar.jpg';
 
 
 
@@ -13,6 +14,7 @@ export default function Register({ match, history }){
     const [categories, setCategories] = useState([]);
     const [categoryId, setCategoryId] = useState([]);
     const [image, setImage] = useState(null);
+    const [imageLink, setImageLink] = useState(null);
 
     
     async function handleSubmit(e){
@@ -25,6 +27,8 @@ export default function Register({ match, history }){
         data.append('phone',phone);
         data.append('bio',bio);
         data.append('category', categoryId);
+
+        
 
         const response = await api.post('/register', data);
 
@@ -65,6 +69,15 @@ export default function Register({ match, history }){
         }
     }
 
+    function handleImage(e){
+        if (e.target.files.length > 0) {
+            setImage(e.target.files[0]);
+            const imageUrl = URL.createObjectURL(e.target.files[0]);
+            setImageLink(imageUrl);
+        }  
+
+    }
+
 /*    useEffect(() => {
         function loadCategory(){
             console.log(categoryId);
@@ -78,7 +91,13 @@ export default function Register({ match, history }){
             <div className="image-logo">    
             <img src={logo} alt="logo" />
             <form className="form-register" onSubmit={handleSubmit}>
-                <input type="file" name="imagem" onChange={e => setImage(e.target.files[0])} />
+            { imageLink != null ? (
+                    <img src={imageLink} alt="Minha foto"  />
+             
+                ) : (
+                    <img src={avatar} alt="Logo" />
+                )}
+                <input type="file" name="imagem" accept="image/*" onChange={ handleImage } />   
                 <input type="text" onChange={e => setName(e.target.value)} value={name} />
                 <input type="email" onChange={e => setEmail(e.target.value)} value={email} />
                 <input type="tel" name="phone" onChange={e => setPhone(e.target.value)} value={phone} placeholder="Telefone" />
