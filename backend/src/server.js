@@ -26,8 +26,9 @@ io.on('connection', socket => {
 
 mongoose.connect('mongodb+srv://jadyel:jadyeladmin@dbmusmeet.yekc3.mongodb.net/dbmusmeet?retryWrites=true&w=majority', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
 });
+
 app.use((req, res, next) => {
   req.io = io;
   req.connectedUsers = connectedUsers;
