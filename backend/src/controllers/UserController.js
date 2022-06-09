@@ -10,15 +10,15 @@ module.exports = {
         
         const loggedUser = await User.findById(user);
 
-        const users = await User.find({
-            $and :[
-                {_id : { $ne : user}},
-                {_id : {$nin : loggedUser.likes}}, 
-                {_id : {$nin : loggedUser.dislikes}},
-            ],
-        }).populate('category');
+        // const users = await User.find({
+        //     $and :[
+        //         {_id : { $ne : user}},
+        //         {_id : {$nin : loggedUser.likes}}, 
+        //         {_id : {$nin : loggedUser.dislikes}},
+        //     ],
+        // }).populate('category');
 
-        return res.json(users);
+        return res.json(loggedUser);
     },
 
     async show(req, res) {
