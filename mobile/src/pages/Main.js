@@ -1,51 +1,77 @@
-import React from 'react';
+import React , { useEffect, useState } from 'react';
 import {Text, View, SafeAreaView, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import  AsyncStorage  from '@react-native-community/async-storage';
+import api from '../services/api';
 import logo from '../assets/logo.png';
 import like from '../assets/like.png';
 import dislike from '../assets/dislike.png';
 
-export default function Main(){
+export default function Main({ navigation }){
+    const [users, setUsers] = useState([]);
+    const id = navigation.getParam('user');
+    useEffect(() => {
+        async function loadUsers(){
+            const response = await api.get('/user', {
+                headers: {
+                    user : id
+                }
+            })
+            console.log(response.data);
+            setUsers(response.data);
+        }
+        loadUsers();
+    }, [id]);
+
+    async function handleLike(){
+        const [user, ...rest] = users;
+        await api.post(`user/${id}/likes`, null, {
+            headers: {user: user._id}
+            
+        })
+        setUsers(rest);
+    }  
+
+    async function handleDislike(){
+        const [user, ...rest] = users;
+        await api.post(`user/${id}/dislikes`, null, {
+            headers: {user: user._id}
+        })
+        setUsers(rest);
+    }
+
+    async function handleLogout(){
+        await AsyncStorage.clear();
+        navigation.navigate('Login');
+    }
     return (
         
             <SafeAreaView style={styles.container}>
+                <TouchableOpacity onPress={handleLogout}>
                 <Image style={styles.logo}  source={logo} />
+                </TouchableOpacity>
 
                 <View style={ styles.cardContainer }>
-
-                    <View style={[ styles.card , { zIndex: 3 }]}>
+                {users.length == 0 
+                ? <Text style={styles.empty}>Acabou :(</Text> 
+                : (users.map((user, index) => {
+                    <View  style={[ styles.card , { zIndex: users.length  }]}> 
                         <Image  style={ styles.avatar } source={{ uri :'https://th.bing.com/th/id/OIP.Kobk8U-p_PLwy-vYSDM7QQHaDt?pid=ImgDet&rs=1'}} />
                         <View style={ styles.footer }>
-                            <Text style={ styles.name }>Cézar Engraçado</Text>
-                            <Text style={ styles.bio }>Este é o Cezinha Engraçadinho. Tenha certeza de que ele será boa companhia em momentos ruins de sua vida :D.</Text>
+                            <Text style={ styles.name }>sergsergses wawdawdawdad</Text>
+                            <Text style={ styles.bio } numberOfLines={3}>adqweqeadawdaqwdawda</Text>
                         </View>
                     </View>
-                    
-                    {/* <View style={ styles.card }>
-                        <Image  style={ styles.avatar } source={{ uri :'https://th.bing.com/th/id/OIP.Kobk8U-p_PLwy-vYSDM7QQHaDt?pid=ImgDet&rs=1'}} />
-                        <View>
-                            <Text style={ styles.name }>Cézar Graçadinho</Text>
-                            <Text style={ styles.bio }> EngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâoEngraçadâo </Text>
-                        </View>
-                    </View>
-                    <View style={ styles.card }>
-                        <Image style={ styles.avatar } source={{ uri :'https://th.bing.com/th/id/OIP.Kobk8U-p_PLwy-vYSDM7QQHaDt?pid=ImgDet&rs=1'}} />
-                        <View>
-                            <Text style={ styles.name }>Cézar Graçadinho</Text>
-                            <Text style={ styles.bio }> Engraçadâo </Text>
-                        </View>
-                    </View> */}
-                    
+                 }))}       
                 </View> 
                 
-                <View style={styles.buttonsContainer}>
-                <TouchableOpacity style={styles.button}>
+                { users.length > 0 && <View style={styles.buttonsContainer}>
+                <TouchableOpacity onPress={handleDislike} style={styles.button}>
                         <Image source={dislike} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity onPress={handleLike} style={styles.button}>
                         <Image source={like} />
                     </TouchableOpacity>
-                </View>
-
+                </View> }
             </SafeAreaView>
     )
 }
@@ -83,6 +109,13 @@ const styles = StyleSheet.create({
     avatar:{
         flex: 1,
         height: 20,
+    },
+
+    empty:{
+        alignSelf:'center',
+        color:'#999',
+        fontSize:24, 
+        fontWeight:'bold',  
     },
 
     footer: {

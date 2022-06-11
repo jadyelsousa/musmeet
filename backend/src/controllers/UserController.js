@@ -10,15 +10,15 @@ module.exports = {
         
         const loggedUser = await User.findById(user);
 
-        // const users = await User.find({
-        //     $and :[
-        //         {_id : { $ne : user}},
-        //         {_id : {$nin : loggedUser.likes}}, 
-        //         {_id : {$nin : loggedUser.dislikes}},
-        //     ],
-        // }).populate('category');
+        const users = await User.find({
+            $and :[
+                {_id : { $ne : user}},
+                {_id : {$nin : loggedUser.likes}}, 
+                {_id : {$nin : loggedUser.dislikes}},
+            ],
+        }).populate('category');
 
-        return res.json(loggedUser);
+        return res.json(users);
     },
 
     async show(req, res) {
@@ -38,10 +38,11 @@ module.exports = {
     },
 
     async create(req, res) {
-        const { name } = req.body.response;
+
+        const { name } = req.body.currentProfile;
 
         const userExists = await User.findOne({ name: name });
-
+        console.log(userExists);
         if (userExists) {
             return res.json(userExists);
 

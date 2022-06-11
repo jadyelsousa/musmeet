@@ -2,7 +2,7 @@ import React , { useEffect, useState } from 'react';
 import {View,KeyboardAvoidingView, Text , StyleSheet, Image, TextImput, TouchableOpacity } from 'react-native';
 import logo from '../assets/logo.png';
 import api from '../services/api';
-// import  AsyncStorage  from '@react-native-community/async-storage';
+import  AsyncStorage  from '@react-native-community/async-storage';
 import { LoginButton, AccessToken, Profile, LoginManager} from 'react-native-fbsdk-next';
 // import { LoginManager } from "react-native-fbsdk";
 // import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
@@ -13,21 +13,29 @@ export default function Login({ navigation }){
   const [user, setUser] = useState('');
 
   useEffect(() => {
-    // 
+    AsyncStorage.getItem('user').then(user => {
+      if(user){
+        navigation.navigate('Main',{user});
+      }
+    })
   }, []);
   
   async function handleLogin(){
-    const currentProfile = Profile.getCurrentProfile().then(
-      function(currentProfile) {
-        if (currentProfile) {
-          console.log("The current logged user is: " +
-            currentProfile
-            + ". His profile id is: " +
-            currentProfile.userID
-          );
-        }
+    const currentProfile = await Profile.getCurrentProfile();
+
+    if (currentProfile) {
+      const response = await api.post('/login', {
+        currentProfile,
+      })
+
+      if(response){
+        const {_id } = response.data;
+        await AsyncStorage.setItem('user', _id);
+        navigation.navigate('Main',{user:_id});
       }
-    );
+    }
+
+    
     // const response = await api.post('/devs', { username: user });
 
     // const {_id } = response.data;
