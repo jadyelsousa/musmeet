@@ -61,10 +61,14 @@ export default function Main({ navigation }){
                             <Text style={ styles.bio } numberOfLines={3}>adqweqeadawdaqwdawda</Text>
                         </View>
                     </View>
-                 }))}       
+                 }))}      
+                 
                 </View> 
+
                 
-                { users.length > 0 && <View style={styles.buttonsContainer}>
+                
+                { users.length > 0 && 
+                <View style={styles.buttonsContainer}>
                 <TouchableOpacity onPress={handleDislike} style={styles.button}>
                         <Image source={dislike} />
                     </TouchableOpacity>
@@ -72,6 +76,10 @@ export default function Main({ navigation }){
                         <Image source={like} />
                     </TouchableOpacity>
                 </View> }
+
+                { users.length == 0 && <View style={styles.buttonsContainer}>
+                </View> }
+
             </SafeAreaView>
     )
 }
@@ -98,13 +106,14 @@ const styles = StyleSheet.create({
         borderColor: '#DDD',
         borderRadius: 8,
         margin: 30,
-        maxHeight: 380,
+        height: 380,
+        width: 350,
         overflow: 'hidden',
-        // position: 'absolute',
-        // top: 0,
-        // left: 0,
-        // right: 0,
-        // bottom: 0,
+        position: 'absolute',
+        top: -200,
+        left: -205,
+        right: 0,
+        bottom: 0,
     },
     avatar:{
         flex: 1,
