@@ -2,6 +2,7 @@
   package="com.mobile">
 
 
+
     <application
       
       android:name=".MainApplication"

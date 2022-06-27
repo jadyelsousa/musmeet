@@ -12,6 +12,7 @@ export default function Login({history}) {
 
     async function responseFacebook(response) {
         let dados = false;
+        console.log(response);
         if(response.status !== "unknown"){
             dados = await api.post('/login', {
             response,

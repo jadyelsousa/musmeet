@@ -21,28 +21,25 @@ export default function Login({ navigation }){
   }, []);
   
   async function handleLogin(){
+  
+    console.log('butao');
     const currentProfile = await Profile.getCurrentProfile();
 
     if (currentProfile) {
+
       const response = await api.post('/login', {
         currentProfile,
-      })
-
-      if(response){
+      });
+      
+      if(response.data != null){
         const {_id } = response.data;
         await AsyncStorage.setItem('user', _id);
         navigation.navigate('Main',{user:_id});
+      }else{
+        navigation.navigate('Register',{user:currentProfile});
       }
     }
 
-    
-    // const response = await api.post('/devs', { username: user });
-
-    // const {_id } = response.data;
-
-    // await AsyncStorage.setItem('user', id);
-
-    // navigation.navigate('Main');
 
   }
 
@@ -59,8 +56,8 @@ export default function Login({ navigation }){
         <TouchableOpacity onPress= { handleLogin } style={styles.button}>
             <Text style={styles.buttonText}>Entrar com Facebook</Text>
         </TouchableOpacity>
-        {/* <LoginButton 
-          onPress= { handleLogin }
+        {/* <LoginButton style={styles.button}
+          
           onLoginFinished={
             (error, result) => {
               if (error) {
@@ -68,15 +65,11 @@ export default function Login({ navigation }){
               } else if (result.isCancelled) {
                 console.log("login is cancelled.");
               } else {
-                AccessToken.getCurrentAccessToken().then(
-                  (data) => {
-                    console.log(data.accessToken.toString())
-                  }
-                )
+                navigation.navigate('Main');
               }
             }
           }
-          onLogoutFinished={() => console.log("logout.")}/> */}
+          /> */}
       </View>
       
     </KeyboardAvoidingView>
@@ -99,6 +92,7 @@ const styles = StyleSheet.create({
       marginTop: 10,
       justifyContent:'center',
       alignItems: 'center',
+      fontSize: 13  ,
       
   },
   buttonText:{

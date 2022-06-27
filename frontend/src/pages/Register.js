@@ -28,14 +28,13 @@ export default function Register({ match, history }){
         data.append('bio',bio);
         data.append('category', categoryId);
 
-        
+        console.log(data)        
 
         const response = await api.post('/register', data);
 
         const id = response.data._id;
-    
-            if(id){
-            history.push(`/main/${id}`);
+         if(id){
+            
         }   
         
         console.log(response);

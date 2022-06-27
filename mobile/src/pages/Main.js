@@ -1,14 +1,31 @@
 import React , { useEffect, useState } from 'react';
-import {Text, View, SafeAreaView, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import {Text, View, SafeAreaView, TouchableOpacity, Image, StyleSheet, Button } from 'react-native';
 import  AsyncStorage  from '@react-native-community/async-storage';
+import io from 'socket.io-client';
 import api from '../services/api';
 import logo from '../assets/logo.png';
 import like from '../assets/like.png';
 import dislike from '../assets/dislike.png';
+import itsameet from '../assets/itsameet1.png';
+import { Linking, ToastAndroid } from 'react-native'
+
 
 export default function Main({ navigation }){
+
+    async function openUrl(url){
+        if(await Linking.canOpenURL(url)) {
+        //   ToastAndroid.show('Tá enviando' + url, ToastAndroid.SHORT)
+          await Linking.openURL(url)
+        }
+        else {
+            ToastAndroid.show('Can\'t open this URL', ToastAndroid.SHORT)
+        }
+    }
+
     const [users, setUsers] = useState([]);
     const id = navigation.getParam('user');
+    const [meet, setMeet] = useState(null);
+    
     useEffect(() => {
         async function loadUsers(){
             const response = await api.get('/user', {
@@ -22,10 +39,22 @@ export default function Main({ navigation }){
         loadUsers();
     }, [id]);
 
+    useEffect(() => {
+        const socket = io('http://localhost:3333',{
+            query : { user: id}
+        }); 
+
+        socket.on('match', user => {
+            setMeet(user);  
+        })
+
+        
+    }, [id]);
+
     async function handleLike(){
         const [user, ...rest] = users;
-        await api.post(`user/${id}/likes`, null, {
-            headers: {user: user._id}
+        await api.post(`user/${user._id}/likes`, null, {
+            headers: {user: id }
             
         })
         setUsers(rest);
@@ -33,8 +62,8 @@ export default function Main({ navigation }){
 
     async function handleDislike(){
         const [user, ...rest] = users;
-        await api.post(`user/${id}/dislikes`, null, {
-            headers: {user: user._id}
+        await api.post(`user/${user._id}/dislikes`, null, {
+            headers: {user: id}
         })
         setUsers(rest);
     }
@@ -43,6 +72,10 @@ export default function Main({ navigation }){
         await AsyncStorage.clear();
         navigation.navigate('Login');
     }
+
+    
+    
+
     return (
         
             <SafeAreaView style={styles.container}>
@@ -51,17 +84,25 @@ export default function Main({ navigation }){
                 </TouchableOpacity>
 
                 <View style={ styles.cardContainer }>
-                {users.length == 0 
-                ? <Text style={styles.empty}>Acabou :(</Text> 
-                : (users.map((user, index) => {
-                    <View  style={[ styles.card , { zIndex: users.length  }]}> 
-                        <Image  style={ styles.avatar } source={{ uri :'https://th.bing.com/th/id/OIP.Kobk8U-p_PLwy-vYSDM7QQHaDt?pid=ImgDet&rs=1'}} />
+              
+                { users.length == 0 && 
+                <Text style={styles.empty}>Acabou :(</Text>  }
+
+                { users.map((user, index) => 
+                
+                    <View  key={user._id} style={[ styles.card , { zIndex: users.length - index  }]}> 
+                        <Image  style={ styles.avatar } source={{ uri :`http://localhost:3333/files/${user.image}`}} />
+                        <Button  title={user.category[0].name}/>
                         <View style={ styles.footer }>
-                            <Text style={ styles.name }>sergsergses wawdawdawdad</Text>
-                            <Text style={ styles.bio } numberOfLines={3}>adqweqeadawdaqwdawda</Text>
+                            <Text style={ styles.name }>{user.name}</Text>
+                            <Text style={ styles.bio } numberOfLines={3}>{user.bio}</Text>
+                            <Text style={ styles.bio } >{user.email}</Text>
+                      
+                                
+                          
                         </View>
                     </View>
-                 }))}      
+                 )}
                  
                 </View> 
 
@@ -79,6 +120,27 @@ export default function Main({ navigation }){
 
                 { users.length == 0 && <View style={styles.buttonsContainer}>
                 </View> }
+
+                {
+                    meet && (
+                        <View style={styles.matchContainer}>
+                            <Image source={itsameet} />
+                            <Image  style={ styles.meetAvatar } source={{ uri : meet.picture}} />
+
+                            <Text style={styles.meetName}>{meet.name}</Text>
+                            <Text style={styles.meetBio}>{meet.email}</Text>
+
+                            <TouchableOpacity onPress={() => setMeet(null)}>
+                            <Text style={styles.closeMeet}>FECHAR</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={ () => openUrl('https://api.whatsapp.com/send?phone=5561984451185&text=Olá%20Datolo%20Juvelino%20Tudo%20Bem?') }>
+                            <Text style={styles.wtsMeet}>WHATSAPP</Text>
+                            </TouchableOpacity>
+
+                        </View>
+                    )
+                }
 
             </SafeAreaView>
     )
@@ -111,7 +173,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         position: 'absolute',
         top: -200,
-        left: -205,
+        left: -200,
         right: 0,
         bottom: 0,
     },
@@ -169,5 +231,44 @@ const styles = StyleSheet.create({
         },
     },
     
-    
+    matchContainer: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor : 'rgba(0, 0, 0, 0.8)',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+
+    meetAvatar: {
+        width: 160,
+        height:160,
+        borderRadius:80,
+        borderWidth:5,
+        borderColor:'#FFF',
+        marginVertical:30,
+    },
+    meetName: {
+        fontSize: 26,
+        fontWeight:'bold',
+        color:'#FFF',
+    },
+    meetBio:{
+        marginTop: 10,
+        fontSize: 16,
+        color: 'rgba(255, 255, 255, 0.5)',
+        lineHeight: 24,
+        textAlign:'center',
+        paddingHorizontal: 30
+    },
+    closeMeet:{
+        fontSize:16,
+        color: 'rgba(255, 255, 255, 0.5)',
+        marginTop: 30,
+        fontWeight: 'bold'
+    },
+    wtsMeet:{
+        fontSize:16,
+        color: 'green',
+        marginTop: 30,
+        fontWeight: 'bold'
+    },
   });

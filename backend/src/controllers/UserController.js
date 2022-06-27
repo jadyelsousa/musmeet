@@ -40,9 +40,8 @@ module.exports = {
     async create(req, res) {
 
         const { name } = req.body.currentProfile;
-
+    
         const userExists = await User.findOne({ name: name });
-        console.log(userExists);
         if (userExists) {
             return res.json(userExists);
 
@@ -53,27 +52,27 @@ module.exports = {
     },
 
     async store(req,res){
-        const {name, email, phone, bio, category} = req.body;
+
+        const { name, email, phone, bio, category } = req.body;
         const { filename: image} = req.file;
-
-        await sharp(req.file.path)
-            .resize(500, 500)
-            .jpeg({quality:70})
-            .toFile(
-                path.resolve(req.file.destination, 'uploads', image)
-            )
-
-        fs.unlinkSync(req.file.path);
+        let categories = JSON.parse(category)
         
-        let categories = category.split(',');
+        await sharp(req.file.path)
+        .resize(500, 500)
+        .jpeg({quality:70})
+        .toFile(
+            path.resolve(req.file.destination, 'uploads', image)
+        )
+
+    fs.unlinkSync(req.file.path);
+        
 
         const user = await User.create({
             name,
             email,
             image,
             phone,
-            bio,
-            
+            bio,       
         });
            
            categories.map( categoriId => {
@@ -82,15 +81,13 @@ module.exports = {
            });
 
         await user.save();
-
+        
         return res.json(user);       
     },
     
     async filter(req, res) {
         const userId = req.params.userId;
         const { category: categoryId } = req.body;
-    
-
         const users = await User.find({
             $and :[
                 {_id : { $ne : userId}},

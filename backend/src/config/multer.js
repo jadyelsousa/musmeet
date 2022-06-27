@@ -1,7 +1,6 @@
 const multer = require('multer');
 const path = require('path');
 
-
 module.exports = {
     dest: path.resolve(__dirname,'..','..','files'),
     storage: multer.diskStorage({
@@ -23,5 +22,6 @@ module.exports = {
         } else {
             cb(new Error("Inválid file type."));
         }
-    }
+    },
+    
 };
